@@ -118,6 +118,7 @@ module.exports = {
 
         const isWhitespace = /[\s]/;
         const isNotWhiteSpace = /[^\s]/;
+        const templateLiteralExtractor = /\${(.*)}/gs;
 
         return {
           TemplateLiteral(node) {
@@ -131,7 +132,10 @@ module.exports = {
               let indentation = '';
 
               const rawSql = raw
-                .slice(2, raw.length - 2)
+                .slice(
+                  raw[1] === '\n' ? 2 : 1,
+                  raw.length - (raw[raw.length - 2] === '\n' ? 2 : 1),
+                )
                 .split('\n')
                 .map((value, index) => {
                   if (index === 0) {
@@ -147,21 +151,40 @@ module.exports = {
                     : value;
                 })
                 .join('\n')
-                .replace(/\${/g, '"${')
-                .replace(/}/g, '}"');
+                .trim();
 
-              const formattedSql = sqlFormatter.format(rawSql);
+              const literals = [...rawSql.matchAll(templateLiteralExtractor)];
 
-              const formatSqlForFixer = formattedSql
-                .split('\n')
-                .map(value => `${indentation}${value}`)
-                .join('\n')
-                .replace(/"\${/g, '${')
-                .replace(/}"/g, '}');
+              const rawSQLWithoutLiterals = literals.reduce(
+                (reduced, [literal]) => {
+                  return reduced.replace(literal, 'Δ');
+                },
+                rawSql,
+              );
 
-              if (rawSql !== formattedSql) {
+              const formattedSql = sqlFormatter.format(rawSQLWithoutLiterals);
+
+              const formatSqlForFixer = () => {
+                const literalsToPutback = literals
+                  .map(([literal]) => literal)
+                  .reverse();
+
+                let toWrite = formattedSql
+                  .split('\n')
+                  .map(value => `${indentation}${value}`)
+                  .join('\n');
+
+                while (toWrite.includes('Δ')) {
+                  toWrite = toWrite.replace('Δ', literalsToPutback.pop());
+                }
+
+                return toWrite;
+              };
+
+              if (formattedSql !== rawSQLWithoutLiterals) {
                 context.report({
                   node,
+                  loc: { start: node.loc.start, end: node.loc.start },
                   message: 'Format the query',
                   fix: fixer =>
                     fixer.replaceTextRange(
@@ -169,7 +192,7 @@ module.exports = {
                         node.quasis[0].range[0],
                         node.quasis[node.quasis.length - 1].range[1],
                       ],
-                      '`\n' + formatSqlForFixer + '\n`',
+                      '`\n' + formatSqlForFixer() + '\n' + indentation + '`',
                     ),
                 });
               }
