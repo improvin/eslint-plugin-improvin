@@ -131,6 +131,11 @@ module.exports = {
 
               let indentation = '';
 
+              console.log({
+                first: raw[1] === '\n' ? 2 : 1,
+                second: raw.length - (raw[raw.length - 2] === '\n' ? 2 : 1),
+              });
+
               const rawSql = raw
                 .slice(
                   raw[1] === '\n' ? 2 : 1,
@@ -142,6 +147,7 @@ module.exports = {
                     const matches = isNotWhiteSpace.exec(value);
 
                     if (matches) {
+                      console.log(matches);
                       indentation = new Array(matches.index).fill(' ').join('');
                     }
                   }
