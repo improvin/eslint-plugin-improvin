@@ -1,10 +1,10 @@
-# eslint-plugin-skira
+# eslint-plugin-improvin
 
-Custom eslint rules created by and used by the Skira development team
+Custom eslint rules created by and used by the Improvin development team
 
-### Install command with esling-config-skira
+### Install command with esling-config-improvin
 
-`yarn add --dev https://github.com/plantaseed/eslint-config-skira.git https://github.com/plantaseed/eslint-plugin-skira.git`
+`yarn add --dev https://github.com/plantaseed/eslint-config-improvin.git https://github.com/plantaseed/eslint-plugin-improvin.git`
 
 ### How the sql linting works
 
@@ -19,10 +19,10 @@ sql`SELECT * FROM "table_name"`;
 
 ### Rules
 
-1. `skira/sql-matching-double-quotes`: Checks if you have incorrectly formatted double quotes for a postgres query
+1. `improvin/sql-matching-double-quotes`: Checks if you have incorrectly formatted double quotes for a postgres query
 
    - OK: select "tableName"."fieldName" from "tableName";
    - BAD: select tableName"."fieldName" from "tableName"; || select "tableName."fieldName" from "tableName";
 
-2. `skira/sql-formatting`: Errors if your sql template string is not formatted the same way as the npm package sql-formatter
+2. `improvin/sql-formatting`: Errors if your sql template string is not formatted the same way as the npm package sql-formatter
    - We make use of this rule with eslints auto fixing
