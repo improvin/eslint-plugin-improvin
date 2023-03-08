@@ -201,5 +201,29 @@ module.exports = {
         };
       },
     },
+
+    'no-destructuring-process-env': {
+      meta: {
+        type: 'problem',
+      },
+      create(context) {
+        return {
+          MemberExpression(node) {
+            if (
+              node.object.name === 'process' &&
+              node.property.name === 'env' &&
+              node.parent.type === 'VariableDeclarator' &&
+              node.parent.id.type === 'ObjectPattern'
+            ) {
+              context.report({
+                node: node.parent,
+                message:
+                  'Do not use destructuring with process.env, use process.env.ENV instead',
+              });
+            }
+          },
+        };
+      },
+    },
   },
 };
