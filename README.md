@@ -2,7 +2,7 @@
 
 Custom eslint rules created by and used by the Improvin development team
 
-### Install command with esling-config-improvin
+### Install command with eslint-config-improvin
 
 `yarn add --dev https://github.com/plantaseed/eslint-config-improvin.git https://github.com/plantaseed/eslint-plugin-improvin.git`
 
