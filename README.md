@@ -2,6 +2,12 @@
 
 Custom eslint rules created by and used by the Improvin development team
 
+
+### Deprecated
+
+This repository is unmaintained. Don't use it!
+Instead, use a plugin like https://www.npmjs.com/package/eslint-plugin-sql. 
+
 ### Install command with eslint-config-improvin
 
 `yarn add --dev https://github.com/plantaseed/eslint-config-improvin.git https://github.com/plantaseed/eslint-plugin-improvin.git`
