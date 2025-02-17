@@ -3,10 +3,14 @@
 Custom eslint rules created by and used by the Improvin development team
 
 
-### Deprecated
+## Deprecated
 
 This repository is unmaintained. Don't use it!
+
 Instead, use a plugin like https://www.npmjs.com/package/eslint-plugin-sql. 
+
+
+## Installation
 
 ### Install command with eslint-config-improvin
 
